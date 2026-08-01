@@ -103,3 +103,17 @@ def add_entity_risk_features(df: pd.DataFrame, entity_col: str = "P_emaildomain"
     df = df.drop(columns=[f"{entity_col}_cum_fraud_count", f"{entity_col}_cum_txn_count"])
 
     return df
+def encode_categoricals(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Convert object-dtype columns to pandas 'category' dtype.
+    LightGBM handles categorical columns natively when given this dtype -
+    no need for one-hot encoding, which would explode dimensionality
+    on high-cardinality columns like card4, DeviceInfo, etc.
+    """
+    cat_cols = df.select_dtypes(include="object").columns.tolist()
+
+    for col in cat_cols:
+        df[col] = df[col].astype("category")
+
+    print(f"Encoded {len(cat_cols)} categorical columns: {cat_cols}")
+    return df

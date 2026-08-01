@@ -11,14 +11,15 @@
 - [x] Entity aggregation features (P_emaildomain_fraud_rate)
 - [x] Entity aggregation features (card1_fraud_rate)
 - [x] Categorical encoding (31 columns converted to category dtype)
-- [ ] Apply full feature pipeline to test_df
-- [ ] Save processed train/test data to data/processed/
+- [x] Apply full feature pipeline to test_df
+- [x] Save processed train/test data to data/processed/ (441 features total)
 
 ## Week 3: Modeling
 - [ ] Baseline model (Logistic Regression, class-weighted)
 - [ ] LightGBM model
 - [ ] MLflow experiment tracking
 - [ ] Evaluation: PR-AUC, precision@k, cost-based threshold selection
+- [ ] Feature importance analysis and pruning (441 -> ~50-100 features)
 
 ## Week 4: Explainability
 - [ ] SHAP values for model predictions

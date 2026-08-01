@@ -78,3 +78,28 @@ def add_amount_deviation_features(df: pd.DataFrame) -> pd.DataFrame:
     df["amt_deviation_from_avg"] = df["amt_deviation_from_avg"].fillna(0)
 
     return df
+def add_entity_risk_features(df: pd.DataFrame, entity_col: str = "P_emaildomain") -> pd.DataFrame:
+    """
+    Historical fraud rate for a given entity (e.g. email domain), computed
+    using only transactions BEFORE the current one (expanding, shifted).
+    High-risk email domains/merchants are a strong fraud signal in practice.
+    """
+    df = df.sort_values("TransactionDT").reset_index(drop=True)
+
+    df[f"{entity_col}_cum_fraud_count"] = (
+        df.groupby(entity_col)["isFraud"].transform(lambda x: x.expanding().sum().shift(1))
+    )
+    df[f"{entity_col}_cum_txn_count"] = (
+        df.groupby(entity_col)["isFraud"].transform(lambda x: x.expanding().count().shift(1))
+    )
+    df[f"{entity_col}_fraud_rate"] = (
+        df[f"{entity_col}_cum_fraud_count"] / df[f"{entity_col}_cum_txn_count"]
+    )
+
+    # No prior history for this entity yet -> use global fraud rate as neutral fallback
+    global_fraud_rate = df["isFraud"].mean()
+    df[f"{entity_col}_fraud_rate"] = df[f"{entity_col}_fraud_rate"].fillna(global_fraud_rate)
+
+    df = df.drop(columns=[f"{entity_col}_cum_fraud_count", f"{entity_col}_cum_txn_count"])
+
+    return df

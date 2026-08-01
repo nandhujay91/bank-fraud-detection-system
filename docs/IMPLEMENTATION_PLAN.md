@@ -9,8 +9,10 @@
 - [x] Velocity features (card1_txn_count_1d/7d, card1_txn_amt_sum_1d/7d)
 - [x] Amount deviation features (expanding mean/std, no leakage)
 - [x] Entity aggregation features (P_emaildomain_fraud_rate)
-- [ ] Entity aggregation features (card1_fraud_rate)
-- [ ] Categorical encoding (ProductCD, card4, card6, M1-M9, DeviceType, etc.)
+- [x] Entity aggregation features (card1_fraud_rate)
+- [x] Categorical encoding (31 columns converted to category dtype)
+- [ ] Apply full feature pipeline to test_df
+- [ ] Save processed train/test data to data/processed/
 
 ## Week 3: Modeling
 - [ ] Baseline model (Logistic Regression, class-weighted)
